@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guerilla · the Index of Operations</title>
+<meta name="description" content="Guerilla is building the Index of Operations, the control layer for the machine age: one shape-based representation that monitors, models and controls real machines.">
+<style>
+  :root {
+    --bg: #f5f3ef;
+    --ink: #1a1a1a;
+    --muted: #6f6f6a;
+    --line: #d8d5cd;
+    --box: #ffffff;
+    --accent: #1a1a1a;
+    --serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+    --mono: "SF Mono", "JetBrains Mono", "Menlo", "Consolas", "Liberation Mono", monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 15px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 64px 28px 120px; }
+
+  header { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; flex-wrap: wrap; margin-bottom: 44px; }
+  .brand { font-family: var(--serif); font-size: 34px; font-weight: 500; letter-spacing: -0.01em; line-height: 1.1; }
+  nav { display: flex; gap: 20px; font-size: 13.5px; flex-wrap: wrap; }
+  nav a { color: var(--ink); text-decoration: none; padding-bottom: 3px; border-bottom: 1.5px solid transparent; transition: border-color .18s ease; }
+  nav a:hover, nav a.active { border-color: var(--ink); }
+
+  .intro { font-size: 15px; line-height: 1.7; max-width: 640px; margin-bottom: 8px; }
+  .intro .tagline { margin-bottom: 18px; }
+  .intro b { font-weight: 600; }
+  .intro a { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
+  .affil { color: var(--muted); font-size: 13.5px; line-height: 1.7; margin-top: 20px; }
+  .affil a { color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
+
+  .sec-label {
+    font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+    margin: 62px 0 8px; padding-bottom: 10px; border-bottom: 1px solid var(--line);
+  }
+  .sec-note { color: var(--muted); font-size: 12.5px; line-height: 1.6; margin: 0 0 14px; max-width: 620px; }
+  .theme { font-family: var(--serif); font-size: 17px; font-weight: 500; letter-spacing: -0.01em; margin: 30px 0 4px; }
+
+  .entry { display: grid; grid-template-columns: 14px 1fr; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--line); align-items: start; }
+  .entry:last-child { border-bottom: none; }
+  .dot { width: 6px; height: 6px; background: var(--ink); border-radius: 50%; margin-top: 9px; }
+  .entry.boxed { background: var(--box); border: 1px solid var(--ink); border-radius: 3px; padding: 18px 20px; margin: 10px 0; grid-template-columns: 1fr; gap: 6px; }
+  .entry.boxed .dot { display: none; }
+  .e-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+  .e-title { font-weight: 600; font-size: 14.5px; letter-spacing: -0.005em; }
+  .e-title a { color: var(--ink); text-decoration: none; border-bottom: 1.5px solid transparent; transition: border-color .18s; }
+  .e-title a:hover { border-color: var(--ink); }
+  .e-meta { color: var(--muted); font-size: 12.5px; white-space: nowrap; }
+  .e-body { color: var(--muted); font-size: 13.5px; line-height: 1.6; margin-top: 5px; }
+  .e-links { margin-top: 9px; display: flex; gap: 16px; flex-wrap: wrap; }
+  .e-links a { color: var(--ink); font-size: 12.5px; text-decoration: none; border-bottom: 1px solid var(--line); padding-bottom: 1px; transition: border-color .18s; }
+  .e-links a:hover { border-color: var(--ink); }
+  .tag { display: inline-block; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); border-radius: 2px; padding: 1px 7px; margin-left: 4px; vertical-align: 1px; }
+  .tag.live { color: var(--ink); border-color: var(--ink); }
+  .tag.priv { color: var(--muted); border-color: var(--line); }
+
+  .pub { display: grid; grid-template-columns: 14px 1fr; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); align-items: start; }
+  .pub:last-child { border-bottom: none; }
+  .pub .num { font-size: 12px; color: var(--muted); margin-top: 3px; }
+  .pub-title { font-weight: 600; font-size: 14px; line-height: 1.45; }
+  .pub-venue { color: var(--muted); font-size: 12.5px; margin-top: 3px; }
+
+  .contact { margin-top: 20px; font-size: 14px; line-height: 1.9; }
+  .contact a { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
+  .contact .row { color: var(--muted); }
+  .contact .row b { color: var(--ink); font-weight: 600; font-variant: normal; }
+
+  footer { margin-top: 80px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+
+
+  .intro .lede { font-family: var(--serif); font-size: 21px; line-height: 1.4; margin-bottom: 18px; letter-spacing: -0.01em; }
+  .theme { font-family: var(--serif); font-size: 16px; font-weight: 500; margin: 26px 0 2px; }
+  .ml { list-style: none; }
+  .ml li { display: grid; grid-template-columns: 1fr auto; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 13.5px; line-height: 1.5; }
+  .ml li:last-child { border-bottom: none; }
+  .ml li .r { color: var(--muted); font-size: 12px; white-space: nowrap; }
+  .ml a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--line); }
+  .ml a:hover { border-color: var(--ink); }
+  details.post { border-bottom: 1px solid var(--line); padding: 14px 0; }
+  details.post summary { cursor: pointer; list-style: none; font-family: var(--serif); font-size: 18px; line-height: 1.35; }
+  details.post summary::-webkit-details-marker { display: none; }
+  details.post summary::before { content: "+ "; font-family: var(--mono); font-size: 13px; color: var(--muted); }
+  details.post[open] summary::before { content: "\2212 "; }
+  details.post .dek { display: block; font-family: var(--mono); font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+  details.post .body { margin-top: 14px; }
+  details.post .body p { font-size: 14px; line-height: 1.75; margin-bottom: 12px; max-width: 640px; }
+  details.post .body h2 { font-family: var(--serif); font-weight: 500; font-size: 18px; margin: 20px 0 8px; }
+  details.post .body blockquote { border-left: 2px solid var(--ink); padding-left: 14px; margin: 16px 0; font-family: var(--serif); font-size: 17px; line-height: 1.5; max-width: 600px; }
+  .go { display: inline-block; margin-top: 10px; font-size: 13px; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink); }
+  .orgs { color: var(--ink); }
+
+
+  .prose p { font-size: 14px; line-height: 1.78; margin-bottom: 14px; max-width: 660px; }
+  .prose h3 { font-family: var(--serif); font-weight: 500; font-size: 18px; margin: 26px 0 8px; letter-spacing: -0.01em; }
+  .prose ol { margin: 0 0 16px 20px; font-size: 14px; line-height: 1.75; max-width: 640px; }
+  .prose li { margin-bottom: 8px; }
+  .prose b { font-weight: 600; }
+  .eq { background: var(--box); border: 1px solid var(--line); border-radius: 3px; padding: 12px 14px; margin: 4px 0 12px; font-family: var(--mono); font-size: 13px; line-height: 1.7; overflow-x: auto; white-space: pre; }
+  .steps { list-style: none; margin-left: 0 !important; counter-reset: s; }
+  .steps li { counter-increment: s; position: relative; padding-left: 34px; }
+  .steps li::before { content: counter(s, decimal-leading-zero); position: absolute; left: 0; top: 1px; font-size: 12px; color: var(--muted); }
+  .entry.boxed .e-title { margin-bottom: 4px; }
+  .ml li b { font-weight: 600; }
+  .tablewrap { overflow-x: auto; }
+  table.nums { width: 100%; border-collapse: collapse; font-size: 13px; margin: 8px 0 10px; }
+  table.nums th { text-align: left; font-weight: 400; color: var(--muted); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 8px 10px 8px 0; border-bottom: 1px solid var(--ink); }
+  table.nums td { padding: 10px 10px 10px 0; border-bottom: 1px solid var(--line); vertical-align: top; line-height: 1.55; }
+  table.nums td:first-child { width: 30%; font-weight: 600; }
+  table.nums td:last-child { color: var(--muted); white-space: nowrap; font-size: 12px; }
+  table.nums b { font-weight: 600; }
+
+  @media (max-width: 560px) {
+    table.nums td:first-child { width: auto; }
+    .eq { font-size: 12px; }
+    .ml li { grid-template-columns: 1fr; gap: 2px; }
+    .intro .lede { font-size: 18px; }
+    .wrap { padding: 40px 20px 80px; }
+    .brand { font-size: 27px; }
+    header { margin-bottom: 34px; }
+    .e-meta { white-space: normal; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">Guerilla</div>
+    <nav>
+      <a href="#idea" class="active">Idea</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#evidence">Evidence</a>
+      <a href="#limits">Limits</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#plan">Plan</a>
+      <a href="../">Sehaj Singh</a>
+    </nav>
+  </header>
+
+  <div class="intro">
+    <div class="lede">Machines don't run on numbers. They run on parts, and the parts draw a shape.</div>
+    <div class="tagline">
+      Guerilla is building the <b>Index of Operations (IOO)</b>, the control layer for the machine age. IOO is an index of the physical operators every machine is made of, like motors, pumps, joints and thermal masses, connected at the points where they pass energy and force. Build a machine from that index and its telemetry stops being a pile of numbers and becomes a shape. That one shape is used to monitor the machine, model its dynamics, predict where it's going and control it, with a stability proof on the controller.
+    </div>
+    <div class="affil">Founder: Sehaj Randhir Singh &nbsp;·&nbsp; New York &nbsp;·&nbsp; 2026</div>
+  </div>
+
+  <!-- ================= PROBLEM ================= -->
+  <div class="sec-label" id="problem">The problem</div>
+  <div class="prose">
+    <p>AI is now limited by physical things: power, the grid, data centers, factories and robots. The machines doing that work are coupled systems, and almost all machine learning on them treats them as flat tables of sensor numbers or compresses them into a video-style latent. That causes the same four failures everywhere.</p>
+    <ol>
+      <li><b>No transfer.</b> A model trained on one motor, turbine or robot doesn't work on the next one, so every unit needs its own data.</li>
+      <li><b>Brittle to maintenance.</b> Recalibrate or swap a sensor and the features drift for reasons that have nothing to do with the machine's health.</li>
+      <li><b>Blind at the low level.</b> World models and vision-language-action policies treat fine-grained signal as noise, but machines fail at the low level first, as a small change in how two parts relate.</li>
+      <li><b>Monitoring and control don't talk.</b> One model watches, a separate controller acts, and they don't share a representation.</li>
+    </ol>
+    <p>Meanwhile the installed base, the motors, pumps, compressors, turbines and grid assets already running, will run for decades and almost none of it gets smarter after commissioning.</p>
+  </div>
+
+  <!-- ================= IDEA ================= -->
+  <div class="sec-label" id="idea">The idea</div>
+  <div class="prose">
+    <p>At any instant a running machine is one point in a space with an axis for every variable it has, currents, torques, temperatures, pressures, positions. As it runs, the point moves. It can't go anywhere it wants, because its parts are physically coupled and energy that leaves one part has to arrive at the next. So the point traces a trajectory on a curved surface inside that space, a manifold, and that surface is the machine. IOO is built to read that surface directly.</p>
+    <p>IOO has two halves that form one object.</p>
+    <div class="entry boxed">
+      <div class="e-title">The Index of Operations, the state</div>
+      <div class="e-body">Every variable of the machine, from microsecond motor current to slow thermal drift to the position of an arm, sits on one coordinate sheet, the great state vector Ψ. It's multi-scale, so fast local physics and slow whole-machine behavior live side by side, and it carries a slow drift coordinate so long-term wear is never thrown away.</div>
+    </div>
+    <div class="entry boxed">
+      <div class="e-title">The Index of Operators, the dynamics</div>
+      <div class="e-body">A catalog of physical operator classes (DC motor, pump, thermal mass, actuator, joint). Each class has its own local geometry, a physical operating envelope, and ports where it trades energy, mass, heat or force. A machine is a composition of operators glued at their ports, written as one sparse block-diagonal matrix: each block is an operator's own dynamics, and the off-diagonal coupling fields are the interfaces. A class of machines is just a different arrangement from the same index.</div>
+    </div>
+    <div class="entry boxed">
+      <div class="e-title">The Time-Series Operator, the engine</div>
+      <div class="e-body">The TSO is what reads, predicts and acts on the index. It reconstructs phase space from raw signals with delay embedding, lifts nonlinear dynamics into a space where they evolve linearly (the Koopman operator, fit with dynamic mode decomposition and a learned deep-Koopman autoencoder), learns the vector field the state flows along, and watches a data-driven Lyapunov exponent for tipping points.</div>
+    </div>
+  </div>
+
+  <!-- ================= MATH ================= -->
+  <div class="sec-label" id="math">The core equations</div>
+  <div class="prose">
+    <h3>1. Sensation: the state on one sheet</h3>
+    <pre class="eq">Ψ(t) = [ x_drift(t) ; ψ_1(t) ; ψ_2(t) ; … ; ψ_macro(t) ]  ∈ ℝ^N(t)</pre>
+    <p>x_drift tracks slow wear and absolute level. Each ψ_i is one operator's local state. N(t) can grow, because when a genuine new interaction shows up the index adds an axis for it.</p>
+
+    <h3>2. Dynamics: a sparse block operator</h3>
+    <pre class="eq">A = blockdiag( K_drift, K_1, K_2, …, K_macro )  +  C          Ψ(t+1) = A Ψ(t) + B u(t)</pre>
+    <p>Each K_i is a Koopman transition matrix for one operator, learned from data and kept sparse by sequentially thresholded least squares. C holds the couplings at the interfaces. Zero blocks are skipped entirely, so a robot's left foot never computes against its right ear, which is what makes the model small enough to run at the edge.</p>
+
+    <h3>3. Monitoring: conservation slip at each interface</h3>
+    <pre class="eq">slip = ⟨ |K₀·u − a| / max( K₀·|u| , |a| ) ⟩        u = command in,  a = measurement out</pre>
+    <p>A healthy interface conserves what crosses it. When a bearing wears or an actuator weakens, the boundary stops conserving and slip rises. Because slip is normalized by magnitude, any per-channel rescale or offset of a sensor cancels exactly (checked numerically to 1e-14). That's invariance by construction, not invariance an optimizer has to learn.</p>
+
+    <h3>4. Prediction and control, with a stability shield</h3>
+    <pre class="eq">Ψ(t+τ) = exp(A·τ) Ψ(t)
+
+u*(t) = B† ( Ψ_target − A Ψ(t) )      subject to   V(Ψ(t+1)) − V(Ψ(t)) ≤ 0</pre>
+    <p>Because the dynamics are linear in the lifted space, the future is one matrix exponential instead of a long rollout, and the control move is one pseudoinverse (or a short model predictive control problem) instead of an iterative search. V is a learned Lyapunov function that rejects any command that would let the system's energy grow, the same certified-Lyapunov machinery from my NeurIPS workshop paper. Adaptation is gated by slip, so it only turns on at the interface that stopped conserving.</p>
+  </div>
+
+  <!-- ================= ARCHITECTURE ================= -->
+  <div class="sec-label" id="architecture">How it runs, end to end</div>
+  <div class="prose">
+    <ol class="steps">
+      <li><b>Multi-rate ingestion.</b> Telemetry streams in on asynchronous clocks, so fast electrical loops can run many times before syncing with slow thermal and mechanical layers.</li>
+      <li><b>Operator compilation.</b> Channels are assigned to operator classes from the index, each operator gets a Riemannian metric from its block of the telemetry covariance, and operators are glued at their ports into one graph. Coupling structure can also be discovered from data with a non-parametric conditional mutual information test.</li>
+      <li><b>Invariant projection.</b> Each interface is read as conservation slip and each operator as a recalibration-free shape signature, with the slow drift coordinate kept alongside so wear stays visible.</li>
+      <li><b>Lifting and adaptive basis.</b> The TSO lifts the dynamics into Koopman coordinates, prunes dead terms, and adds a new basis term only when the residual is genuinely large, so the model grows where the machine is surprising and nowhere else.</li>
+      <li><b>Readout.</b> A message-passing network reads the graph hierarchically, components into subsystems into the whole machine. Each node can be a fiber bundle with separate structural, fluid, thermal and electrical subspaces, and persistent homology adds topological features at readout.</li>
+      <li><b>Certified action.</b> Slip-gated model predictive control on the lifted model, filtered by the Lyapunov shield, with human-readable alerts that say which subsystem and which interface.</li>
+    </ol>
+  </div>
+
+  <!-- ================= WHAT IT DOES ================= -->
+  <div class="sec-label" id="does">What it does</div>
+  <ul class="ml">
+    <li><span><b>Monitor</b>: detect faults from coupling, before raw signals move</span><span class="r">built</span></li>
+    <li><span><b>Localize</b>: name the interface and joint that broke</span><span class="r">built</span></li>
+    <li><span><b>Survive maintenance</b>: hold accuracy through sensor recalibration</span><span class="r">built</span></li>
+    <li><span><b>Transfer</b>: carry one model across units and across machine variants</span><span class="r">built, simulation and real data</span></li>
+    <li><span><b>Forecast</b>: predict trajectories and remaining useful life</span><span class="r">built</span></li>
+    <li><span><b>Control</b>: slip-gated adaptive control with frozen weights across hardware swaps</span><span class="r">simulation</span></li>
+    <li><span><b>Generate</b>: sample a valid healthy shape and read off the physics it implies</span><span class="r">built</span></li>
+    <li><span><b>Explain</b>: plain-language alerts tied to a subsystem and interface</span><span class="r">built</span></li>
+  </ul>
+
+  <!-- ================= TWO DIRECTIONS ================= -->
+  <div class="sec-label" id="directions">Two directions from one index</div>
+  <div class="entry boxed">
+    <div class="e-title">Go deep: a world action model of machines</div>
+    <div class="e-body">Stack the index hierarchically and attach it to space and time, with macro coordinates as the base and each point carrying a fiber of local physics. A visual front-end (3D Gaussian splatting or a Fourier neural operator) turns camera input into geometry on the same sheet, and a language layer turns goals into boundary constraints on the state. A fast geometric loop handles reflexes while a slower semantic loop plans. Because a robot indexes its own body as operators, a new body is a new shape, not a new dataset. Give it two rounded stubs instead of hands at a keyboard and it treats typing as geometry: tilt until the contact patch covers one key, feel for slip, correct.</div>
+  </div>
+  <div class="entry boxed">
+    <div class="e-title">Go small: fewer parameters, less data, at the edge</div>
+    <div class="e-body">The physics prior does the work data would otherwise do. Graphs of tens of nodes, sparse block matrices that skip zeros, CPU-sized models that run on the machine itself on the telemetry it already streams. The long-term target is a split runtime, with global assembly on GPUs and microsecond operator loops on reconfigurable hardware.</div>
+  </div>
+
+  <!-- ================= FLYWHEEL ================= -->
+  <div class="sec-label" id="flywheel">The flywheel</div>
+  <div class="prose">
+    <p>Most of physical AI is betting on collecting more hours of data. Guerilla bets on reuse. Every machine IOO reads adds operators and interfaces to the index, and every new machine built from known operators starts with a prior instead of an empty model. More machines make the index better, and a better index makes the next machine cheaper to bring on. Over time the operator catalog and interface registry become an open standard, with bridges to ROS 2, MQTT and Protobuf and shared fault-injection benchmarks, so the index becomes the way machines describe themselves.</p>
+  </div>
+
+  <!-- ================= MARKET ================= -->
+  <div class="sec-label" id="where">Where it goes first</div>
+  <ul class="ml">
+    <li><span><b>Retrofit monitoring for installed fleets</b>: rotating machinery, satellites, turbines, with no new sensors and no per-unit retraining</span><span class="r">wedge</span></li>
+    <li><span><b>Controllers that survive hardware swaps</b>: drives and actuators that adapt to a new motor or a worn part without retraining</span><span class="r">next</span></li>
+    <li><span><b>The grid under AI load</b>: data centers, batteries and grid assets as flexible, controllable, certified loads</span><span class="r">next</span></li>
+    <li><span><b>Robotics</b>: the low-level world model under robot policies, so they transfer across bodies</span><span class="r">long term</span></li>
+  </ul>
+
+  <!-- ================= EVIDENCE ================= -->
+  <div class="sec-label" id="evidence">Evidence so far</div>
+  <div class="tablewrap">
+  <table class="nums">
+    <thead><tr><th>Test</th><th>Result</th><th>Data</th></tr></thead>
+    <tbody>
+      <tr><td>ESA OPS-SAT, official 2,123-segment protocol</td><td>AUROC 0.911 → <b>0.951</b> over the published baseline, F1 0.744 → 0.848. The same number of plain statistics buys +0.010, so the gain is coupling.</td><td>real</td></tr>
+      <tr><td>Sensor recalibration, OPS-SAT</td><td>Slip 0.749 → <b>0.736</b>. Raw features 0.919 → 0.487. Domain-adversarial training drops 0.36.</td><td>real</td></tr>
+      <tr><td>Sensor recalibration, turbofan engines</td><td>Slip drop <b>0.0012</b> vs 0.310 for raw statistics. Domain-adversarial training drops 0.41.</td><td>real</td></tr>
+      <tr><td>Hexapod robot, 145,683 gaits, 154 joint-fault classes</td><td>Detection <b>0.990</b> vs 0.890 AUC. Localization macro-AUC <b>1.000</b>.</td><td>real</td></tr>
+      <tr><td>CruiseBench, all 9 subsets</td><td><b>1.78 ± 0.11</b> RMSE vs LSTM 6.17, GRU 2.02, TCN 2.52. Best on 6 of 9.</td><td>benchmark</td></tr>
+      <tr><td>Shape signatures across engine units</td><td><b>5.6×</b> more unit-invariant than raw means.</td><td>real</td></tr>
+      <tr><td>Hierarchical aircraft, 22 nodes</td><td>Zero-shot wing-to-wing <b>1.00</b> vs 0.42. Unseen fault types <b>0.99</b> vs 0.57.</td><td>simulation</td></tr>
+      <tr><td>Motor transfer</td><td>Zero-shot motor-family swap, <b>3.16</b> RMSE vs 7.23 for a flat MLP. Faults flagged with a median ~90 s lead.</td><td>simulation</td></tr>
+      <tr><td>Control</td><td>Frozen weights through a DC-to-AC motor swap, <b>0.0001</b> steady-state error vs 2.4% sag. <b>8.2×</b> lower tracking error under a 5× actuator fault, 11.4× lower steady-state error with noise. Healthy control bit-identical.</td><td>simulation</td></tr>
+      <tr><td>Generative shape model</td><td><b>90.2%</b> of generated shapes back out operating points inside the real healthy envelope.</td><td>shape model</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <!-- ================= LIMITS ================= -->
+  <div class="sec-label" id="limits">What it doesn't do yet, and the fix</div>
+  <ul class="ml">
+    <li><span><b>Control is simulation-only.</b> Fix: one frozen controller across a physical actuator swap on a bench motor and a robot joint.</span><span class="r">next 30 days</span></li>
+    <li><span><b>No stability certificate on the slip gate yet.</b> Fix: an ISS / Lyapunov bound on slip-gated control under bounded gain error, with the CROWN tools I already use.</span><span class="r">next 60 days</span></li>
+    <li><span><b>Operators are hand-built</b>, mostly rotating machinery. Fix: learn operators from data with extended DMD and residual basis selection.</span><span class="r">next 90 days</span></li>
+    <li><span><b>Shape is blind to slow level drift</b>, which is real wear. Fix: the dual-scale state, a slow drift coordinate carried next to the invariant shape.</span><span class="r">designed</span></li>
+    <li><span><b>The adaptive basis grew 94× in 140 steps</b> on a motor test. Fix: a noise-adaptive threshold (relative ε around 0.15 to 0.2) so it only grows on genuine anomalies.</span><span class="r">designed</span></li>
+    <li><span><b>On a nearly linear motor, plain least squares tied the Koopman lift</b> (6.26 vs 6.39 RMSE). Fix: fall back to linear blocks where the machine is linear and spend lift only where it isn't.</span><span class="r">designed</span></li>
+    <li><span><b>At 9 channels a graph network adds nothing</b> over feature stacking. Fix: scale down to plain stacking for sparse assets, so the operator is the product and the GNN is one readout.</span><span class="r">designed</span></li>
+    <li><span><b>At full data, flexible sequence models catch up.</b> Fix: grow the coupling fields and basis with data, so the prior wins at low data and the model keeps scaling at high data.</span><span class="r">research</span></li>
+    <li><span><b>Ten-minute SCADA averages defeat everything</b>, IOO included. That's the edge of where it applies: it needs dynamics-rate telemetry.</span><span class="r">scope</span></li>
+  </ul>
+
+  <!-- ================= ROADMAP ================= -->
+  <div class="sec-label" id="roadmap">The build: 15 components in four layers</div>
+  <div class="theme">I. Sensory compiler</div>
+  <ul class="ml">
+    <li><span>1. Asynchronous multi-clock ingestion pipeline</span><span class="r">planned</span></li>
+    <li><span>2. Geometric vision front-end (3D Gaussian splatting / Fourier neural operator)</span><span class="r">planned, deep path</span></li>
+    <li><span>3. Great state vector multiplexer with the slow drift coordinate</span><span class="r">prototype</span></li>
+    <li><span>4. Non-parametric conditional mutual information topology builder</span><span class="r">built</span></li>
+  </ul>
+  <div class="theme">II. Operator engine</div>
+  <ul class="ml">
+    <li><span>5. Extended DMD / Koopman lift (exact DMD, Fourier lift, deep Koopman)</span><span class="r">built</span></li>
+    <li><span>6. Residual basis selector that grows the lift where error is real</span><span class="r">prototype</span></li>
+    <li><span>7. Active causal probe and Jacobian estimator</span><span class="r">planned</span></li>
+    <li><span>8. Sparse pruner (STLSQ, 67 to 94% zeros in K)</span><span class="r">built</span></li>
+  </ul>
+  <div class="theme">III. Simulation and learning</div>
+  <ul class="ml">
+    <li><span>9. Stochastic simulation sandbox (Itô SDEs) for internal stress tests</span><span class="r">planned</span></li>
+    <li><span>10. Model-based actor-critic inside the lifted model</span><span class="r">planned</span></li>
+    <li><span>11. Goal compiler that turns language goals into constraints on Ψ</span><span class="r">planned, deep path</span></li>
+  </ul>
+  <div class="theme">IV. Certified control</div>
+  <ul class="ml">
+    <li><span>12. Neural Lyapunov solver with certified training through CROWN</span><span class="r">built</span></li>
+    <li><span>13. Passivity-based coupling filter on C</span><span class="r">planned</span></li>
+    <li><span>14. One-step pseudoinverse and slip-gated MPC resolver</span><span class="r">simulation</span></li>
+    <li><span>15. Edge compiler, GPU assembly to microsecond loops on reconfigurable hardware</span><span class="r">planned</span></li>
+  </ul>
+
+  <!-- ================= PLAN ================= -->
+  <div class="sec-label" id="plan">The plan</div>
+  <div class="entry">
+    <div class="dot"></div>
+    <div>
+      <div class="e-head"><div class="e-title">Days 0 to 30: hardware</div><div class="e-meta">Jan</div></div>
+      <div class="e-body">Bench rig with two motors and a robot joint. One frozen IOO controller across a physical actuator swap, measured against a tuned baseline.</div>
+    </div>
+  </div>
+  <div class="entry">
+    <div class="dot"></div>
+    <div>
+      <div class="e-head"><div class="e-title">Days 30 to 60: proof</div><div class="e-meta">Feb</div></div>
+      <div class="e-body">Stability certificate for slip-gated control. Dual-scale drift coordinate and adaptive basis threshold merged into the core.</div>
+    </div>
+  </div>
+  <div class="entry">
+    <div class="dot"></div>
+    <div>
+      <div class="e-head"><div class="e-title">Days 60 to 90: two machines, one graph</div><div class="e-meta">Mar</div></div>
+      <div class="e-body">A pump and a motor in one IOO graph, first learned operators, and a first design partner running retrofit monitoring on installed equipment.</div>
+    </div>
+  </div>
+  <div class="entry">
+    <div class="dot"></div>
+    <div>
+      <div class="e-head"><div class="e-title">Months 4 to 12: the index grows</div><div class="e-meta">2027</div></div>
+      <div class="e-body">Edge runtime, operator learning at scale, pilots on grid and data-center power assets, the open interface registry, and the first deep-path experiments on a robot.</div>
+    </div>
+  </div>
+
+  <!-- ================= WHY ================= -->
+  <div class="sec-label" id="why">Why us</div>
+  <div class="prose">
+    <p>Guerilla starts from control theory, not from scaling. Its founder, Sehaj Randhir Singh, built IOO solo, works on certified stability for learned grid controllers with Prof. Wenqi Cui at NYU Tandon (first-author paper accepted at NeurIPS 2026's Tackling Climate Change with ML workshop), and interns on data-center grid infrastructure. The name is the strategy: small, fast and asymmetric, using structure where everyone else uses scale.</p>
+    <p>Code and result files are private. Anyone who wants to check a number can <a href="mailto:sehajrsinghs@gmail.com">email me</a>.</p>
+  </div>
+
+  <footer>
+    Guerilla · the Index of Operations · New York · 2026
+  </footer>
+
+
+</div>
+
+<script>
+  const links = document.querySelectorAll('nav a[href^="#"]');
+  const map = [...links].map(a => ({ a, el: document.querySelector(a.getAttribute('href')) })).filter(x => x.el);
+  const onScroll = () => {
+    let cur = map[0];
+    for (const m of map) { if (m.el.getBoundingClientRect().top <= 120) cur = m; }
+    links.forEach(l => l.classList.remove('active'));
+    if (cur) cur.a.classList.add('active');
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+</script>
+</body>
+</html>
