@@ -163,7 +163,7 @@
   <div class="intro">
     <div class="lede">Machines don't run on numbers. They run on parts, and the parts draw a shape.</div>
     <div class="tagline">
-      Guerilla is building the Index of Operations (IOO). It's an index of the physical parts every machine is made of, like motors, pumps, joints and thermal masses, connected at the points where they pass energy and force. Build a machine from that index and its telemetry stops being a pile of numbers and becomes a shape, and that one shape is used to monitor the machine, model its dynamics, predict where it's going and control it. The first product is a small box that does the monitoring part on machines that are already installed.
+      Guerilla is building the Index of Operations (IOO). It's an index of the physical parts every machine is made of, like motors, pumps, joints and thermal masses, connected at the points where they pass energy and force. Build a machine from that index and its telemetry stops being a pile of numbers and becomes a shape, and that one shape is used to monitor the machine, model its dynamics, predict where it's going and control it. Guerilla is a software company. The first product does the monitoring part on machines that are already installed, running on a computer the plant already has.
     </div>
     <div class="affil">Founder: Sehaj Randhir Singh &nbsp;·&nbsp; New York</div>
   </div>
@@ -184,8 +184,10 @@
   <!-- ================= PRODUCT ================= -->
   <div class="sec-label" id="product">The first product</div>
   <div class="prose">
-    <p>A small box that sits next to a machine a plant already owns. It reads the telemetry the machine already streams, with no new sensors, and tells the operator which part is going wrong, at which connection, and how early. Because it reads how parts relate instead of raw sensor levels, it keeps working after maintenance swaps or recalibrates a sensor, which is where most monitoring quietly breaks, and one model carries across units of the same machine instead of being retrained for each.</p>
-    <p>The test I want to run with a first design partner is short. One machine, one industrial PC, thirty days, measured against the alarms the plant already has. If it flags a fault earlier than they do, or stays quiet through a maintenance event that sets theirs off, the value is sitting in their own logs. That's the wedge, and everything after it, controllers that survive a hardware swap and certified control for the grid under AI load, reuses the same index.</p>
+    <p>It's software. It installs on an industrial PC or edge gateway next to a machine a plant already owns, reads the telemetry that machine already streams, and tells the operator which part is going wrong, at which connection, and how early. There are no new sensors and no hardware of ours to buy. Because it reads how parts relate instead of raw sensor levels, it keeps working after maintenance swaps or recalibrates a sensor, which is where most monitoring software quietly breaks, and one model carries across units of the same machine instead of being retrained for each.</p>
+    <p>The person I expect to buy it is the plant's reliability or maintenance manager, who owns unplanned downtime and already pays for condition-monitoring software out of the maintenance budget. What they're buying is earlier warning on real faults and fewer false alarms after maintenance.</p>
+    <p>The test I want to run with a first design partner is short. One machine, one install, thirty days, measured against the alarms the plant already has. If it flags a fault earlier than they do, or stays quiet through a maintenance event that sets theirs off, the value is sitting in their own logs.</p>
+    <p>What makes it a software business and not a consulting one is the index. Every machine it reads adds part models and connections to a shared library, so the next deployment on a similar machine is configuration instead of a new model. That's the wedge, and everything after it, controllers that survive a hardware swap and certified control for the grid under AI load, ships as more software on the same index.</p>
   </div>
 
   <!-- ================= EVIDENCE ================= -->
@@ -383,7 +385,7 @@ u*(t) = B† ( Ψ_target − A Ψ(t) )      subject to   V(Ψ(t+1)) − V(Ψ(t))
   <div class="sec-label" id="founder">The founder</div>
   <div class="prose">
     <p>I'm Sehaj Randhir Singh, a junior at Queens High School for the Sciences in New York. My dad has been a grid operating engineer for 35 years, so the first machine I learned to think about was the biggest one there is, and what stuck with me was how much of it runs on controllers that were tuned once at commissioning and never touched again while the hardware aged under them.</p>
-    <p>That's where Guerilla started. In February 2026 I wrote a <a href="https://github.com/sehajr-singhs/ELECTRIC_ADAPTION" target="_blank" rel="noopener">whitepaper on machines that adapt as they age</a>, and then I spent the year learning what it takes to trust a learned controller, working with Prof. Wenqi Cui at NYU Tandon on stability proofs for learned grid controllers. That <a href="https://openreview.net/forum?id=iAKq71lqO6" target="_blank" rel="noopener">paper</a>, with me as first author, was accepted at the Tackling Climate Change with ML workshop at NeurIPS 2026. The Index of Operations is what came out of putting those two things together, and I built it solo. I also intern on data-center grid infrastructure, which is where I see the load this has to hold up under.</p>
+    <p>That's where Guerilla started. In February 2026 I wrote a <a href="https://github.com/sehajr-singhs/ELECTRIC_ADAPTION" target="_blank" rel="noopener">whitepaper on machines that adapt as they age</a>, and then I spent the year learning what it takes to trust a learned controller, working with Prof. Wenqi Cui at NYU Tandon on stability proofs for learned grid controllers. That <a href="https://openreview.net/forum?id=iAKq71lqO6" target="_blank" rel="noopener">paper</a>, with me as first author, was accepted at the Tackling Climate Change with ML workshop at NeurIPS 2026. The Index of Operations is what came out of putting those two things together, and I built it solo. I build in software first. The engine, the training loop that puts a verifier inside it and the benchmarks are all code, and five of the repositories are public below. I also intern on data-center grid infrastructure, which is where I see the load this has to hold up under.</p>
     <p>The name is the strategy. Small, fast and asymmetric, using structure where everyone else uses scale.</p>
   </div>
 
@@ -397,7 +399,7 @@ u*(t) = B† ( Ψ_target − A Ψ(t) )      subject to   V(Ψ(t+1)) − V(Ψ(t))
     <li><span><a href="https://github.com/sehajr-singhs/ELECTRIC_ADAPTION" target="_blank" rel="noopener">Electric Adaption</a>, the whitepaper that started it</span><span class="r">public</span></li>
   </ul>
   <div class="prose">
-    <p>The IOO core and its result files are private for now. <a href="mailto:sehajrsinghs@gmail.com">Email me</a> and I'll send the files behind any number on this page.</p>
+    <p>The core IOO experiments regenerate from saved records with one command. The IOO core and its result files are private for now. <a href="mailto:sehajrsinghs@gmail.com">Email me</a> and I'll send the files behind any number on this page.</p>
   </div>
 
   <footer>
