@@ -136,6 +136,9 @@
     header { margin-bottom: 34px; }
     .e-meta { white-space: normal; }
   }
+  .dot { width: auto; height: auto; background: none; border-radius: 0; margin-top: 0; color: var(--muted); }
+  .dot::before { content: "–"; }
+  .ml a, .prose a { color: var(--ink); }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } html { scroll-behavior: auto; } }
 </style>
 </head>
@@ -146,22 +149,23 @@
 
   <header>
     <nav>
-      <a href="#idea" class="active">Idea</a>
-      <a href="#architecture">Architecture</a>
+      <a href="#product" class="active">Product</a>
       <a href="#evidence">Evidence</a>
+      <a href="#idea">Idea</a>
       <a href="#limits">Limits</a>
-      <a href="#roadmap">Roadmap</a>
       <a href="#plan">Plan</a>
-      <a href="../">Sehaj Singh</a>
+      <a href="#founder">Founder</a>
+      <a href="#code">Code</a>
+      <a href="../">Sehaj Randhir Singh</a>
     </nav>
   </header>
 
   <div class="intro">
     <div class="lede">Machines don't run on numbers. They run on parts, and the parts draw a shape.</div>
     <div class="tagline">
-      Guerilla is building the <b>Index of Operations (IOO)</b>, the control layer for the machine age. IOO is an index of the physical operators every machine is made of, like motors, pumps, joints and thermal masses, connected at the points where they pass energy and force. Build a machine from that index and its telemetry stops being a pile of numbers and becomes a shape. That one shape is used to monitor the machine, model its dynamics, predict where it's going and control it, with a stability proof on the controller.
+      Guerilla is building the Index of Operations (IOO). It's an index of the physical parts every machine is made of, like motors, pumps, joints and thermal masses, connected at the points where they pass energy and force. Build a machine from that index and its telemetry stops being a pile of numbers and becomes a shape, and that one shape is used to monitor the machine, model its dynamics, predict where it's going and control it. The first product is a small box that does the monitoring part on machines that are already installed.
     </div>
-    <div class="affil">Founder: Sehaj Randhir Singh &nbsp;·&nbsp; New York &nbsp;·&nbsp; 2026</div>
+    <div class="affil">Founder: Sehaj Randhir Singh &nbsp;·&nbsp; New York</div>
   </div>
 
   <!-- ================= PROBLEM ================= -->
@@ -177,6 +181,45 @@
     <p>Meanwhile the installed base, the motors, pumps, compressors, turbines and grid assets already running, will run for decades and almost none of it gets smarter after commissioning.</p>
   </div>
 
+  <!-- ================= PRODUCT ================= -->
+  <div class="sec-label" id="product">The first product</div>
+  <div class="prose">
+    <p>A small box that sits next to a machine a plant already owns. It reads the telemetry the machine already streams, with no new sensors, and tells the operator which part is going wrong, at which connection, and how early. Because it reads how parts relate instead of raw sensor levels, it keeps working after maintenance swaps or recalibrates a sensor, which is where most monitoring quietly breaks, and one model carries across units of the same machine instead of being retrained for each.</p>
+    <p>The test I want to run with a first design partner is short. One machine, one industrial PC, thirty days, measured against the alarms the plant already has. If it flags a fault earlier than they do, or stays quiet through a maintenance event that sets theirs off, the value is sitting in their own logs. That's the wedge, and everything after it, controllers that survive a hardware swap and certified control for the grid under AI load, reuses the same index.</p>
+  </div>
+
+  <!-- ================= EVIDENCE ================= -->
+  <div class="sec-label" id="evidence">Evidence so far</div>
+  <div class="tablewrap">
+  <table class="nums">
+    <thead><tr><th>Test</th><th>Result</th><th>Data</th></tr></thead>
+    <tbody>
+      <tr><td>ESA OPS-SAT, official 2,123-segment protocol</td><td>AUROC 0.911 → <b>0.951</b> over the published baseline, F1 0.744 → 0.848. The same number of plain statistics buys +0.010, so the gain is coupling.</td><td>real</td></tr>
+      <tr><td>Sensor recalibration, OPS-SAT</td><td>Slip 0.749 → <b>0.736</b>. Raw features 0.919 → 0.487. Domain-adversarial training drops 0.36.</td><td>real</td></tr>
+      <tr><td>Sensor recalibration, turbofan engines</td><td>Slip drop <b>0.0012</b> vs 0.310 for raw statistics. Domain-adversarial training drops 0.41.</td><td>real</td></tr>
+      <tr><td>Hexapod robot, 145,683 gaits, 154 joint-fault classes</td><td>Detection <b>0.990</b> vs 0.890 AUC. Localization macro-AUC <b>1.000</b>.</td><td>real</td></tr>
+      <tr><td>CruiseBench, all 9 subsets</td><td><b>1.78 ± 0.11</b> RMSE vs LSTM 6.17, GRU 2.02, TCN 2.52. Best on 6 of 9.</td><td>benchmark</td></tr>
+      <tr><td>Shape signatures across engine units</td><td><b>5.6×</b> more unit-invariant than raw means.</td><td>real</td></tr>
+      <tr><td>Hierarchical aircraft, 22 nodes</td><td>Zero-shot wing-to-wing <b>1.00</b> vs 0.42. Unseen fault types <b>0.99</b> vs 0.57.</td><td>simulation</td></tr>
+      <tr><td>Motor transfer</td><td>Zero-shot motor-family swap, <b>3.16</b> RMSE vs 7.23 for a flat MLP. Faults flagged with a median ~90 s lead.</td><td>simulation</td></tr>
+      <tr><td>Control</td><td>Frozen weights through a DC-to-AC motor swap, <b>0.0001</b> steady-state error vs 2.4% sag. <b>8.2×</b> lower tracking error under a 5× actuator fault, 11.4× lower steady-state error with noise. Healthy control bit-identical.</td><td>simulation</td></tr>
+      <tr><td>Generative shape model</td><td><b>90.2%</b> of generated shapes back out operating points inside the real healthy envelope.</td><td>shape model</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="prose">
+    <p>The two OPS-SAT rows are different experiments, so their numbers don't compare with each other. The first adds slip to the published features on the official protocol. The second uses slip by itself, with no labels, to test one thing, which is whether the score survives recalibration. Before recalibration, raw statistics score higher than slip alone (0.919 vs 0.749). After it, raw statistics are a coin flip and slip hasn't moved. Where a spread is shown it's across runs, and the other rows don't have a spread reported yet.</p>
+  </div>
+
+  <!-- ================= MARKET ================= -->
+  <div class="sec-label" id="where">Where it goes first</div>
+  <ul class="ml">
+    <li><span><b>Retrofit monitoring for installed fleets</b>: rotating machinery, satellites, turbines, with no new sensors and no per-unit retraining</span><span class="r">wedge</span></li>
+    <li><span><b>Controllers that survive hardware swaps</b>: drives and actuators that adapt to a new motor or a worn part without retraining</span><span class="r">next</span></li>
+    <li><span><b>The grid under AI load</b>: data centers, batteries and grid assets as flexible, controllable, certified loads</span><span class="r">next</span></li>
+    <li><span><b>Robotics</b>: the low-level world model under robot policies, so they transfer across bodies</span><span class="r">long term</span></li>
+  </ul>
+
   <!-- ================= IDEA ================= -->
   <div class="sec-label" id="idea">The idea</div>
   <div class="prose">
@@ -191,7 +234,7 @@
       <div class="e-body">A catalog of physical operator classes (DC motor, pump, thermal mass, actuator, joint). Each class has its own local geometry, a physical operating envelope, and ports where it trades energy, mass, heat or force. A machine is a composition of operators glued at their ports, written as one sparse block-diagonal matrix: each block is an operator's own dynamics, and the off-diagonal coupling fields are the interfaces. A class of machines is just a different arrangement from the same index.</div>
     </div>
     <div class="entry boxed">
-      <div class="e-title">The Time-Series Operator, the engine</div>
+      <div class="e-title">The Time-Series Operator, the engine &nbsp;<a href="https://github.com/sehajr-singhs/time-series-operator" target="_blank" rel="noopener" style="font-weight:400;font-size:12.5px;color:var(--muted);">code</a></div>
       <div class="e-body">The TSO is what reads, predicts and acts on the index. It reconstructs phase space from raw signals with delay embedding, lifts nonlinear dynamics into a space where they evolve linearly (the Koopman operator, fit with dynamic mode decomposition and a learned deep-Koopman autoencoder), learns the vector field the state flows along, and watches a data-driven Lyapunov exponent for tipping points.</div>
     </div>
   </div>
@@ -259,38 +302,6 @@ u*(t) = B† ( Ψ_target − A Ψ(t) )      subject to   V(Ψ(t+1)) − V(Ψ(t))
   <div class="sec-label" id="flywheel">The flywheel</div>
   <div class="prose">
     <p>Most of physical AI is betting on collecting more hours of data. Guerilla bets on reuse. Every machine IOO reads adds operators and interfaces to the index, and every new machine built from known operators starts with a prior instead of an empty model. More machines make the index better, and a better index makes the next machine cheaper to bring on. Over time the operator catalog and interface registry become an open standard, with bridges to ROS 2, MQTT and Protobuf and shared fault-injection benchmarks, so the index becomes the way machines describe themselves.</p>
-  </div>
-
-  <!-- ================= MARKET ================= -->
-  <div class="sec-label" id="where">Where it goes first</div>
-  <ul class="ml">
-    <li><span><b>Retrofit monitoring for installed fleets</b>: rotating machinery, satellites, turbines, with no new sensors and no per-unit retraining</span><span class="r">wedge</span></li>
-    <li><span><b>Controllers that survive hardware swaps</b>: drives and actuators that adapt to a new motor or a worn part without retraining</span><span class="r">next</span></li>
-    <li><span><b>The grid under AI load</b>: data centers, batteries and grid assets as flexible, controllable, certified loads</span><span class="r">next</span></li>
-    <li><span><b>Robotics</b>: the low-level world model under robot policies, so they transfer across bodies</span><span class="r">long term</span></li>
-  </ul>
-
-  <!-- ================= EVIDENCE ================= -->
-  <div class="sec-label" id="evidence">Evidence so far</div>
-  <div class="tablewrap">
-  <table class="nums">
-    <thead><tr><th>Test</th><th>Result</th><th>Data</th></tr></thead>
-    <tbody>
-      <tr><td>ESA OPS-SAT, official 2,123-segment protocol</td><td>AUROC 0.911 → <b>0.951</b> over the published baseline, F1 0.744 → 0.848. The same number of plain statistics buys +0.010, so the gain is coupling.</td><td>real</td></tr>
-      <tr><td>Sensor recalibration, OPS-SAT</td><td>Slip 0.749 → <b>0.736</b>. Raw features 0.919 → 0.487. Domain-adversarial training drops 0.36.</td><td>real</td></tr>
-      <tr><td>Sensor recalibration, turbofan engines</td><td>Slip drop <b>0.0012</b> vs 0.310 for raw statistics. Domain-adversarial training drops 0.41.</td><td>real</td></tr>
-      <tr><td>Hexapod robot, 145,683 gaits, 154 joint-fault classes</td><td>Detection <b>0.990</b> vs 0.890 AUC. Localization macro-AUC <b>1.000</b>.</td><td>real</td></tr>
-      <tr><td>CruiseBench, all 9 subsets</td><td><b>1.78 ± 0.11</b> RMSE vs LSTM 6.17, GRU 2.02, TCN 2.52. Best on 6 of 9.</td><td>benchmark</td></tr>
-      <tr><td>Shape signatures across engine units</td><td><b>5.6×</b> more unit-invariant than raw means.</td><td>real</td></tr>
-      <tr><td>Hierarchical aircraft, 22 nodes</td><td>Zero-shot wing-to-wing <b>1.00</b> vs 0.42. Unseen fault types <b>0.99</b> vs 0.57.</td><td>simulation</td></tr>
-      <tr><td>Motor transfer</td><td>Zero-shot motor-family swap, <b>3.16</b> RMSE vs 7.23 for a flat MLP. Faults flagged with a median ~90 s lead.</td><td>simulation</td></tr>
-      <tr><td>Control</td><td>Frozen weights through a DC-to-AC motor swap, <b>0.0001</b> steady-state error vs 2.4% sag. <b>8.2×</b> lower tracking error under a 5× actuator fault, 11.4× lower steady-state error with noise. Healthy control bit-identical.</td><td>simulation</td></tr>
-      <tr><td>Generative shape model</td><td><b>90.2%</b> of generated shapes back out operating points inside the real healthy envelope.</td><td>shape model</td></tr>
-    </tbody>
-  </table>
-  </div>
-  <div class="prose">
-    <p>The two OPS-SAT rows are different experiments, so their numbers don't compare with each other. The first adds slip to the published features on the official protocol. The second uses slip by itself, with no labels, to test one thing, which is whether the score survives recalibration. Before recalibration, raw statistics score higher than slip alone (0.919 vs 0.749). After it, raw statistics are a coin flip and slip hasn't moved.</p>
   </div>
 
   <!-- ================= LIMITS ================= -->
@@ -369,14 +380,28 @@ u*(t) = B† ( Ψ_target − A Ψ(t) )      subject to   V(Ψ(t+1)) − V(Ψ(t))
   </div>
 
   <!-- ================= WHY ================= -->
-  <div class="sec-label" id="why">Why us</div>
+  <div class="sec-label" id="founder">The founder</div>
   <div class="prose">
-    <p>Guerilla starts from control theory, not from scaling. Its founder, Sehaj Randhir Singh, built IOO solo, works on certified stability for learned grid controllers with Prof. Wenqi Cui at NYU Tandon (first-author paper accepted at NeurIPS 2026's Tackling Climate Change with ML workshop), and interns on data-center grid infrastructure. The name is the strategy: small, fast and asymmetric, using structure where everyone else uses scale.</p>
-    <p>Code and result files are private. Anyone who wants to check a number can <a href="mailto:sehajrsinghs@gmail.com">email me</a>.</p>
+    <p>I'm Sehaj Randhir Singh, a junior at Queens High School for the Sciences in New York. My dad has been a grid operating engineer for 35 years, so the first machine I learned to think about was the biggest one there is, and what stuck with me was how much of it runs on controllers that were tuned once at commissioning and never touched again while the hardware aged under them.</p>
+    <p>That's where Guerilla started. In February 2026 I wrote a <a href="https://github.com/sehajr-singhs/ELECTRIC_ADAPTION" target="_blank" rel="noopener">whitepaper on machines that adapt as they age</a>, and then I spent the year learning what it takes to trust a learned controller, working with Prof. Wenqi Cui at NYU Tandon on stability proofs for learned grid controllers. That <a href="https://openreview.net/forum?id=iAKq71lqO6" target="_blank" rel="noopener">paper</a>, with me as first author, was accepted at the Tackling Climate Change with ML workshop at NeurIPS 2026. The Index of Operations is what came out of putting those two things together, and I built it solo. I also intern on data-center grid infrastructure, which is where I see the load this has to hold up under.</p>
+    <p>The name is the strategy. Small, fast and asymmetric, using structure where everyone else uses scale.</p>
+  </div>
+
+  <!-- ================= CODE ================= -->
+  <div class="sec-label" id="code">Code</div>
+  <ul class="ml">
+    <li><span><a href="https://github.com/sehajr-singhs/time-series-operator" target="_blank" rel="noopener">Time-Series Operator</a>, the engine that reads and predicts on the index</span><span class="r">public</span></li>
+    <li><span><a href="https://github.com/sehajr-singhs/operating-atlas" target="_blank" rel="noopener">Operating Atlas</a>, recalibration-invariant shapes of machine operation</span><span class="r">public</span></li>
+    <li><span><a href="https://github.com/sehajr-singhs/certified-training-lyapunov" target="_blank" rel="noopener">Certified training for neural Lyapunov functions</a>, the stability shield</span><span class="r">public</span></li>
+    <li><span><a href="https://github.com/sehajr-singhs/operator" target="_blank" rel="noopener">Operator</a>, a certified controller for a degrading electromechanical plant</span><span class="r">public</span></li>
+    <li><span><a href="https://github.com/sehajr-singhs/ELECTRIC_ADAPTION" target="_blank" rel="noopener">Electric Adaption</a>, the whitepaper that started it</span><span class="r">public</span></li>
+  </ul>
+  <div class="prose">
+    <p>The IOO core and its result files are private for now. <a href="mailto:sehajrsinghs@gmail.com">Email me</a> and I'll send the files behind any number on this page.</p>
   </div>
 
   <footer>
-    Guerilla · the Index of Operations · New York · 2026
+    Guerilla · the Index of Operations
   </footer>
 
 
