@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guerilla · deck</title>
+<style>
+  :root {
+    --bg: #f3f0eb; --ink: #1a1a1a; --muted: #6f6f6a; --line: #d8d5cd; --box: #ffffff;
+    --serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+    --mono: "SF Mono", "JetBrains Mono", "Menlo", "Consolas", "Liberation Mono", monospace;
+  }
+  @page { size: 1280px 720px; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { background: #e4e0d8; color: var(--ink); font-family: var(--mono); font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  .slide { width: 1280px; height: 720px; background: var(--bg); margin: 28px auto; padding: 64px 84px 56px; position: relative; overflow: hidden; display: flex; flex-direction: column; page-break-after: always; break-after: page; }
+  .label { font-size: 12.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); padding-bottom: 12px; border-bottom: 1px solid var(--line); margin-bottom: 30px; display: flex; justify-content: space-between; }
+  h1 { font-family: var(--serif); font-weight: 500; font-size: 44px; line-height: 1.18; letter-spacing: -0.015em; max-width: 980px; margin-bottom: 26px; }
+  h1.big { font-size: 54px; max-width: 900px; }
+  p { max-width: 900px; margin-bottom: 14px; }
+  .muted { color: var(--muted); }
+  b { font-weight: 600; }
+  .foot { position: absolute; left: 84px; right: 84px; bottom: 30px; display: flex; justify-content: space-between; font-size: 11.5px; color: var(--muted); letter-spacing: 0.06em; }
+  .cols { display: grid; gap: 22px; }
+  .c2 { grid-template-columns: 1fr 1fr; } .c3 { grid-template-columns: 1fr 1fr 1fr; } .c4 { grid-template-columns: repeat(4, 1fr); }
+  .card { background: var(--box); border: 1px solid var(--ink); border-radius: 3px; padding: 20px 22px; font-size: 14.5px; line-height: 1.55; }
+  .card .k { font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .card .t { font-family: var(--serif); font-size: 21px; line-height: 1.25; margin-bottom: 8px; }
+  .num { font-family: var(--serif); font-size: 46px; line-height: 1; letter-spacing: -0.02em; margin-bottom: 10px; }
+  .rows { list-style: none; }
+  .rows li { display: grid; grid-template-columns: 1fr auto; gap: 20px; padding: 11px 0; border-bottom: 1px solid var(--line); font-size: 15.5px; }
+  .rows li:last-child { border-bottom: none; }
+  .rows .r { color: var(--muted); font-size: 12.5px; white-space: nowrap; }
+  .eq { background: var(--box); border: 1px solid var(--line); border-radius: 3px; padding: 14px 18px; font-size: 16px; margin: 6px 0 18px; display: inline-block; }
+  .logo { width: 620px; margin: 30px 0 6px -84px;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 26%, #000 74%, transparent), linear-gradient(to bottom, transparent, #000 28%, #000 72%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 26%, #000 74%, transparent), linear-gradient(to bottom, transparent, #000 28%, #000 72%, transparent);
+    -webkit-mask-composite: source-in; mask-composite: intersect; }
+  a { color: var(--ink); }
+  @media print { body { background: var(--bg); } .slide { margin: 0; } }
+</style>
+</head>
+<body>
+
+<section class="slide">
+  <img class="logo" src="logo.jpg" alt="Guerilla">
+  <h1 class="big">Machines don't run on numbers. They run on parts, and the parts draw a shape.</h1>
+  <p>Guerilla is a software company building the Index of Operations, one model of a machine's parts and the connections between them that is used to monitor it, predict it and control it.</p>
+  <div class="foot"><span>Sehaj Randhir Singh · New York</span><span>sehajr-singhs.github.io/guerilla</span></div>
+</section>
+
+<section class="slide">
+  <div class="label"><span>The problem</span><span>02</span></div>
+  <h1>AI is now limited by physical machines, and the models watching them fail in the same four ways.</h1>
+  <div class="cols c4">
+    <div class="card"><div class="t">No transfer</div>A model trained on one motor or robot doesn't work on the next, so every unit needs its own data.</div>
+    <div class="card"><div class="t">Brittle to maintenance</div>Swap or recalibrate a sensor and the features drift for reasons unrelated to health.</div>
+    <div class="card"><div class="t">Blind at the low level</div>Machines fail first as a small change in how two parts relate, which big models treat as noise.</div>
+    <div class="card"><div class="t">Watching and acting don't talk</div>One model monitors, a separate controller acts, and they share nothing.</div>
+  </div>
+  <div class="foot"><span>Guerilla</span><span>The installed base runs for decades and almost none of it gets smarter after commissioning.</span></div>
+</section>
+
+<section class="slide">
+  <div class="label"><span>The first product</span><span>03</span></div>
+  <h1>Software that tells a plant which part is going wrong, at which connection, and how early.</h1>
+  <div class="cols c3">
+    <div class="card"><div class="k">Install</div>Runs on an industrial PC or edge gateway the plant already has and reads the telemetry the machine already streams. No new sensors and no hardware of ours.</div>
+    <div class="card"><div class="k">Why it holds up</div>It reads how parts relate instead of raw sensor levels, so it keeps working after maintenance recalibrates a sensor, and one model carries across units of the same machine.</div>
+    <div class="card"><div class="k">Buyer</div>The plant's reliability or maintenance manager, who owns unplanned downtime and already pays for condition-monitoring software.</div>
+  </div>
+  <div class="foot"><span>Guerilla</span><span>The first test: one machine, one install, thirty days, against the alarms the plant already has.</span></div>
+</section>
+
+<section class="slide">
+  <div class="label"><span>How it works</span><span>04</span></div>
+  <h1>A machine is parts that pass energy to each other. Watch the connections.</h1>
+  <p>The index models each part (motor, pump, joint, thermal mass) and the points where parts connect. A healthy connection conserves what crosses it. When a bearing wears or an actuator weakens it stops conserving, and that signal is called slip.</p>
+  <div class="eq">slip = ⟨ |K₀·u − a| / max( K₀·|u| , |a| ) ⟩ &nbsp;&nbsp; u = command in, a = measurement out</div>
+  <p class="muted">Slip is normalized by magnitude, so rescaling or offsetting a sensor cancels exactly. The invariance is built in, it isn't something an optimizer has to learn. The same signal tells a controller when and where to adapt.</p>
+  <div class="foot"><span>Guerilla</span><span>One representation for monitoring, prediction and control.</span></div>
+</section>
+
+<section class="slide">
+  <div class="label"><span>Evidence so far</span><span>05</span></div>
+  <h1>It catches faults on real data, and it barely moves when the sensors are recalibrated.</h1>
+  <div class="cols c4">
+    <div class="card"><div class="num">0.951</div><div class="k">real · ESA OPS-SAT</div>AUROC with slip added, up from the published baseline of 0.911 on the official protocol.</div>
+    <div class="card"><div class="num">0.736</div><div class="k">real · after recalibration</div>Slip alone goes 0.749 → 0.736. Raw features fall from 0.919 to 0.487.</div>
+    <div class="card"><div class="num">0.990</div><div class="k">real · hexapod robot</div>Fault detection AUC across 154 joint-fault classes, against 0.890 for the baseline.</div>
+    <div class="card"><div class="num">8.2×</div><div class="k">simulation · control</div>Lower tracking error under a 5× actuator fault, with frozen weights through a motor swap.</div>
+  </div>
+  <div class="foot"><span>Guerilla</span><span>The two OPS-SAT numbers are different experiments and don't compare with each other. Full table on the site.</span></div>
+</section>
+
+<section class="slide">
+  <div class="label"><span>Why it's a software business</span><span>06</span></div>
+  <h1>Every machine it reads makes the next one cheaper to bring on.</h1>
+  <div class="cols c2">
+    <div>
+      <p>Most of physical AI is betting on collecting more hours of data. Guerilla bets on reuse.</p>
+      <p>Each deployment adds part models and connections to a shared index, so the next deployment on a similar machine is configuration instead of a new model.</p>
+      <p class="muted">That's what keeps it from being consulting, and it's why the index gets more valuable than any single install.</p>
+    </div>
+    <ul class="rows">
+      <li><span><b>Retrofit monitoring</b> for installed fleets</span><span class="r">wedge</span></li>
+      <li><span><b>Controllers that survive hardware swaps</b></span><span class="r">next</span></li>
+      <li><span><b>The grid under AI load</b>, as certified flexible load</span><span class="r">next</span></li>
+      <li><span><b>Robotics</b>, the low-level model under robot policies</span><span class="r">long term</span></li>
+    </ul>
+  </div>
+  <div class="foot"><span>Guerilla</span><span>Everything after the wedge ships as more software on the same index.</span></div>
+</section>
+
+<section class="slide">
+  <div class="label"><span>What it doesn't do yet</span><span>07</span></div>
+  <h1>The limits, said plainly, with the fix for each.</h1>
+  <ul class="rows">
+    <li><span><b>Control is simulation only.</b> Fix: one frozen controller across a physical actuator swap on a bench motor.</span><span class="r">next 30 days</span></li>
+    <li><span><b>No stability certificate on slip-gated control yet.</b> Fix: a Lyapunov bound with the verification tools I already use.</span><span class="r">next 60 days</span></li>
+    <li><span><b>Part models are hand-built</b>, mostly rotating machinery. Fix: learn them from data.</span><span class="r">next 90 days</span></li>
+    <li><span><b>No customer and no pilot yet.</b> Fix: one design partner, one machine, thirty days.</span><span class="r">the ask</span></li>
+    <li><span><b>Ten-minute SCADA averages defeat it.</b> It needs dynamics-rate telemetry.</span><span class="r">scope</span></li>
+  </ul>
+  <div class="foot"><span>Guerilla</span><span>Nine limits are listed on the site. These are the ones that matter most.</span></div>
+</section>
+
+<section class="slide">
+  <div class="label"><span>The plan</span><span>08</span></div>
+  <h1>Ninety days from software on datasets to software on a real machine.</h1>
+  <div class="cols c4">
+    <div class="card"><div class="k">Days 0 to 30</div><div class="t">Hardware</div>Bench rig with two motors and a robot joint. One frozen controller across a physical swap.</div>
+    <div class="card"><div class="k">Days 30 to 60</div><div class="t">Proof</div>Stability certificate for slip-gated control, merged into the core.</div>
+    <div class="card"><div class="k">Days 60 to 90</div><div class="t">First partner</div>A pump and a motor in one graph, and a design partner running retrofit monitoring.</div>
+    <div class="card"><div class="k">Months 4 to 12</div><div class="t">The index grows</div>Edge runtime, learned part models, pilots on grid and data-center power assets.</div>
+  </div>
+  <div class="foot"><span>Guerilla</span><span>Small, fast and asymmetric, using structure where everyone else uses scale.</span></div>
+</section>
+
+<section class="slide">
+  <div class="label"><span>The founder and the ask</span><span>09</span></div>
+  <h1>Sehaj Randhir Singh</h1>
+  <div class="cols c2">
+    <div>
+      <p>Junior at Queens High School for the Sciences in New York. My dad has been a grid operating engineer for 35 years, so the first machine I learned to think about was the grid, and how much of it runs on controllers tuned once and never touched again.</p>
+      <p>First author of a paper on stability proofs for learned grid controllers, accepted at the Tackling Climate Change with ML workshop at NeurIPS 2026. I built the Index of Operations solo, and five of its repositories are public.</p>
+    </div>
+    <div class="card">
+      <div class="k">What I'm looking for</div>
+      <div class="t">One real machine for thirty days.</div>
+      A design partner with installed equipment and telemetry, a bench to test control on hardware, and people who run machines and will tell me where this breaks.
+      <p style="margin-top:16px;margin-bottom:0"><b>sehajrsinghs@gmail.com</b><br>sehajr-singhs.github.io/guerilla<br>github.com/sehajr-singhs</p>
+    </div>
+  </div>
+  <div class="foot"><span>Guerilla · the Index of Operations</span><span></span></div>
+</section>
+
+</body>
+</html>
